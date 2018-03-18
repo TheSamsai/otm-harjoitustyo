@@ -1,3 +1,5 @@
-# Heippa, tämä on Markdownia
-## Tämä on aliotsikko
-Diipa daapa **Diipa** *daapa*
+# OTM-harjoitustyö
+## Tehtävät
+### Viikko1
+[komentorivi.txt](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/laskarit/komentorivi.txt)
+[gitlog.txt](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/laskarit/gitlog.txt)
