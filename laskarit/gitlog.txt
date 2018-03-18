@@ -1,0 +1,113 @@
+commit 139766f711ad03433cda78d279ef98697c870a97
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 15:00:59 2018 +0200
+
+    Tiedostojen poistoja ja uudelleennimeämisiä
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 75bbe2f57acbaf037efe331ed7323ad92f996518
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:55:55 2018 +0200
+
+    Uudet tiedostot lisätty
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit ebd489bf14936d95cf73ea4fa6edec34c13347b8
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:52:37 2018 +0200
+
+    Poistoja ja lisäyksiä
+
+ eka.txt    | 3 ++-
+ kolmas.txt | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+commit a1a6c7ea345028c02777726ba60c7f0aeaa2a61b
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:51:26 2018 +0200
+
+    Uudelleennimeäminen
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 61b4899a3326d63885297a9d03c18c92409f53fb
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:50:44 2018 +0200
+
+    Poistettu tiedosto
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit b986d3f87229321933c5b40c70f800fa66037b36
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:49:14 2018 +0200
+
+    Poistettu ja lisätty
+
+ tiedosto.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 50c72a1aa1474ec62fa1b61249a82bd9a7b8d167
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:47:36 2018 +0200
+
+    lisätty tekstiä
+
+ tiedosto.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 03f8f2fca9c584c628cfe6c1500002105f3a2279
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:36:24 2018 +0200
+
+    tiedosto alihakemistossa
+
+ stuff/uusi_tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 5f1f9fd5b9ba695d6ce1006c2f74cb44b3b6eb51
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:35:41 2018 +0200
+
+    toinen ja kolmas muokattu
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit 830a88dc3b3afe5dd19efb27da31b03c23c1e80e
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:34:10 2018 +0200
+
+    kolmas tiedosto
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit c6309f03a1c2bbc0dfcb7f6974ba2beba281f73c
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:33:26 2018 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 882557b71c8103577d3ed422896ee918767f7ef9
+Author: Sami Lahtinen <thesamsai@gmail.com>
+Date:   Sun Mar 18 14:32:16 2018 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
