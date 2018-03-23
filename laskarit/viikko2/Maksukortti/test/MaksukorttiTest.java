@@ -56,17 +56,35 @@ public class MaksukorttiTest {
     
     @Test
     public void syoMaukkaastiVahentaaSaldoaOikein() {
-        Maksukortti kortti = new Maksukortti(10);
-
         kortti.syoMaukkaasti();
 
         assertEquals("Kortilla on rahaa 6.0 euroa", kortti.toString());
     }
+    
+    @Test
+    public void voiSyodaEdullisestiTasarahalla() {
+        kortti.syoEdullisesti();
+        kortti.syoEdullisesti();
+        kortti.syoEdullisesti();
+        kortti.syoEdullisesti();
+        
+        assertEquals("Kortilla on rahaa 0.0 euroa", kortti.toString());
+    }
+    
+    @Test
+    public void voiSyodaMaukkaastiTasarahalla() {
+        kortti.lataaRahaa(10);
+        kortti.syoMaukkaasti();
+        kortti.syoMaukkaasti();
+        kortti.syoMaukkaasti();
+        kortti.syoMaukkaasti();
+        kortti.syoMaukkaasti();
+        
+        assertEquals("Kortilla on rahaa 0.0 euroa", kortti.toString());
+    }
 
     @Test
     public void syoEdullisestiEiVieSaldoaNegatiiviseksi() {
-        Maksukortti kortti = new Maksukortti(10);
-
         kortti.syoMaukkaasti();
         kortti.syoMaukkaasti();
         // nyt kortin saldo on 2
@@ -76,9 +94,25 @@ public class MaksukorttiTest {
     }
     
     @Test
+    public void syoMaukkaastiEiVieSaldoaNegatiiviseksi() {
+        kortti.syoMaukkaasti();
+        kortti.syoMaukkaasti();
+        // nyt kortin saldo on 2
+        kortti.syoMaukkaasti();
+
+        assertEquals("Kortilla on rahaa 2.0 euroa", kortti.toString());
+    }
+    
+    @Test
     public void kortilleVoiLadataRahaa() {
         kortti.lataaRahaa(25);
         assertEquals("Kortilla on rahaa 35.0 euroa", kortti.toString());
+    }
+    
+    @Test
+    public void eiVoiLadataNegatiivista() {
+        kortti.lataaRahaa(-5);
+        assertEquals("Kortilla on rahaa 10.0 euroa", kortti.toString());
     }
 
     @Test
