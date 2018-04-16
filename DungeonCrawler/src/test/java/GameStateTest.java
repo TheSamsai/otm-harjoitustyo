@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 
-import dungeoncrawler.game.Level;
+import dungeoncrawler.game.Entity;
+import dungeoncrawler.game.GameState;
+import dungeoncrawler.game.Room;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,11 +19,11 @@ import static org.junit.Assert.*;
  *
  * @author sami
  */
-public class LevelTest {
+public class GameStateTest {
     
-    public static Level level;
+    public static GameState gs;
     
-    public LevelTest() {
+    public GameStateTest() {
     }
     
     @BeforeClass
@@ -33,7 +36,7 @@ public class LevelTest {
     
     @Before
     public void setUp() {
-        level = new Level();
+        gs = new GameState();
     }
     
     @After
@@ -47,11 +50,19 @@ public class LevelTest {
     // public void hello() {}
     
     @Test
-    public void generateMapCreatesCorrectSize() {
-        level.generateMap();
+    public void playerInARoomUponStartup() {
+        ArrayList<Room> rooms = gs.getLevel().getRooms();
+        Entity player = gs.getPlayer();
         
-        assertEquals(level.getMap().length, 30);
-        assertEquals(level.getMap()[0].length, 45);
+        boolean found = false;
+        
+        for (Room r : rooms) {
+            if (r.contains(player.getX(), player.getY())) {
+                found = true;
+                break;
+            }
+        }
+        
+        assertTrue(found);
     }
-    
 }
