@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dungeoncrawler.game;
+package dungeoncrawler.game.level;
 
+import dungeoncrawler.game.level.Room;
+import dungeoncrawler.game.level.Tile;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -58,6 +60,11 @@ public class Level {
                 rooms.add(newRoom);
             }
         }
+        
+        Room lastRoom = rooms.get(rooms.size() - 1);
+        
+        // Add a staircase
+        map[lastRoom.getY() + (lastRoom.getH() / 2)][lastRoom.getX() + (lastRoom.getW() / 2)] = new Tile(Tile.staircase);
     }
     
     public void carveTunnel(int x, int y, int dx, int dy) {

@@ -3,12 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dungeoncrawler.game;
+package dungeoncrawler.game.level;
 
 /**
  *
  * @author sami
  */
+enum TileType {
+    CHASM,
+    WALL,
+    FLOOR,
+    WATER,
+    LAVA,
+    STAIRCASE
+}
+
 public class Tile {
     public static int chasm = 0;
     public static int wall = 2;
@@ -28,9 +37,11 @@ public class Tile {
     }
     
     public boolean passable() {
-        if (this.type == floor) {
+        if (this.type == Tile.floor) {
             return true;
-        } else if (this.type == water) {
+        } else if (this.type == Tile.water) {
+            return true;
+        } else if (this.type == Tile.staircase) {
             return true;
         } else {
             return false;

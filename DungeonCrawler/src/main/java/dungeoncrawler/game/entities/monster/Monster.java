@@ -3,20 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dungeoncrawler.game;
+package dungeoncrawler.game.entities.monster;
 
+import dungeoncrawler.game.GameState;
+import dungeoncrawler.game.entities.Entity;
 import java.util.Random;
 
 /**
  *
  * @author sami
  */
-public class Monster implements Entity, AI {
+public class Monster implements Entity {
     
     private int x;
     private int y;
     private String name;
-    private String sprite_path; 
+    private String spritePath; 
     private int hp;
     private int armor;
     private int accuracy;
@@ -28,7 +30,7 @@ public class Monster implements Entity, AI {
         this.x = x;
         this.y = y;
         this.name = name;
-        this.sprite_path = sprite;
+        this.spritePath = sprite;
         this.hp = hp;
         this.armor = armor;
         this.damageMin = damageMin;
@@ -56,19 +58,18 @@ public class Monster implements Entity, AI {
     }
     
     public String getSprite() {
-        return this.sprite_path;
+        return this.spritePath;
     }
     
-    @Override
-    public void AIDecision(GameState gs) {
-        if (gs.getPlayer().getX() > this.x && gs.moveEntityDirection(this, "RIGHT")) {
-            return;
-        } else if (gs.getPlayer().getX() < this.x && gs.moveEntityDirection(this, "LEFT")) {
-            return;
-        } else if (gs.getPlayer().getY() > this.y && gs.moveEntityDirection(this, "DOWN")) {
-            return;
-        } else if (gs.getPlayer().getY() < this.y && gs.moveEntityDirection(this, "UP")) {
-            return;
+    public void decision(GameState gs) {
+        if (gs.getPlayer().getX() > this.x && gs.canMoveRight(this)) {
+            gs.moveRight(this);
+        } else if (gs.getPlayer().getX() < this.x && gs.canMoveLeft(this)) {
+            gs.moveLeft(this);
+        } else if (gs.getPlayer().getY() > this.y && gs.canMoveDown(this)) {
+            gs.moveDown(this);
+        } else if (gs.getPlayer().getY() < this.y && gs.canMoveUp(this)) {
+            gs.moveUp(this);
         }
     }
 

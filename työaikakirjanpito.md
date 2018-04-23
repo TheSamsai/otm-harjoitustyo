@@ -7,5 +7,7 @@
 | 12.4. | 1    | jacoco:n configurointi ja ohjelman ydinluokkien toteutusta |
 | 15.4. | 2    | checkstylen konfigurointi ja tyylivirheiden korjaus |
 | 16.4. | 3    | uusien player- ja monster-luokkien valmistelua, grafiikkaa |
+| 21.4. | 3    | menu-järjestelmän ja Item-luokan toiminnallisuuden toteutusta |
+| 22.4. | 3    | menu-järjestelmän parantelua, uusia testejä, ohjelman paketointia |
 
-Kaikkiaan: 11 tuntia
+Kaikkiaan: 17 tuntia

@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dungeoncrawler.game;
+package dungeoncrawler.game.entities;
+
+import dungeoncrawler.game.entities.item.Item;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,10 +16,16 @@ public class Player implements Entity {
     private int x;
     private int y;
     private int hp;
+    private int ac;
+    private int xp;
+    private ArrayList<Item> inventory;
     
     public Player(int x, int y) {
         this.x = x;
         this.y = y;
+        this.hp = 20;
+        this.ac = 0;
+        inventory = new ArrayList<>();
     }
     
     @Override
@@ -54,4 +63,7 @@ public class Player implements Entity {
         return hp;
     }
     
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
 }

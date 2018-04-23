@@ -4,9 +4,10 @@
  * and open the template in the editor.
  */
 
-import dungeoncrawler.game.Entity;
+import dungeoncrawler.game.entities.Entity;
 import dungeoncrawler.game.GameState;
-import dungeoncrawler.game.Room;
+import dungeoncrawler.game.entities.Player;
+import dungeoncrawler.game.level.Room;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -64,5 +65,34 @@ public class GameStateTest {
         }
         
         assertTrue(found);
+    }
+    
+    @Test
+    public void movingIntoEnemyDoesNotMovePlayer() {
+        ArrayList<Room> rooms = gs.getLevel().getRooms();
+        Entity player = gs.getPlayer();
+        int startX = player.getX();
+        int startY = player.getY();
+        
+        gs.spawnMonsterAt(player.getX()-1, player.getY());
+        gs.moveLeft(player);
+        
+        assertTrue((startX == player.getX()) == (startY == player.getY()));
+    }
+    
+    @Test
+    public void movingIntoItemPicksUp() {
+        ArrayList<Room> rooms = gs.getLevel().getRooms();
+        Player player = (Player) gs.getPlayer();
+        
+        gs.spawnItemAt(player.getX()-1, player.getY());
+        gs.moveLeft(player);
+        
+        ArrayList<String> input = new ArrayList<>();
+        input.add("ENTER");
+        
+        gs.processInput(input);
+        
+        assertTrue(player.getInventory().size() > 0);
     }
 }
