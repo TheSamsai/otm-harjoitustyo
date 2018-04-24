@@ -49,18 +49,4 @@ public class Room {
     public boolean contains(int x, int y) {
         return (x <= this.x + this.w) && (y <= this.y + this.h);
     }
-    
-    public boolean overlaps(Room room) {
-        if (contains(room.x, room.y)) {
-            return true;
-        } else if (contains(room.x + room.w, room.y)) {
-            return true;
-        } else if (contains(room.x, room.y + room.h)) {
-            return true;
-        } else if (contains(room.x + room.w, room.y + room.h)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
