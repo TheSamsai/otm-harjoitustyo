@@ -9,3 +9,7 @@
 ## Project architecture
 
 [Project architecture documentation](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/architecture.md)
+
+## Releases
+
+[0.1 release](https://github.com/TheSamsai/otm-harjoitustyo/releases/tag/v0.1)
