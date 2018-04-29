@@ -15,7 +15,7 @@ items and monsters. An action log will appear in the bottom of the window, which
 have taken place in the game world recently. The right side of the window contains information related to the player,
 like their current health and what equipment they are currently carrying.
 
-![Screenshot](TODO)
+![Screenshot](https://raw.githubusercontent.com/TheSamsai/otm-harjoitustyo/master/documentation/screenshot.png)
 
 ### Movement and controls
 The player can move through the dungeon using the arrow keys. Moving into monsters initiates combat and the player rolls for
