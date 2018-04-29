@@ -5,10 +5,10 @@
  */
 package dungeoncrawler.game;
 
-import dungeoncrawler.game.entities.monster.Monster;
+import dungeoncrawler.game.entities.monster.*;
 import dungeoncrawler.game.entities.Player;
 import dungeoncrawler.game.entities.Entity;
-import dungeoncrawler.game.entities.item.Item;
+import dungeoncrawler.game.entities.item.*;
 import dungeoncrawler.game.level.Level;
 import dungeoncrawler.game.level.Room;
 import dungeoncrawler.game.level.Tile;
@@ -23,41 +23,64 @@ enum MenuType {
     INVENTORY
 }
 
+/**
+ * The class modelling the current state of the game, containing
+ * various functions for probing and modifying the state.
+ */
 public class GameState {
     private Level level;
+    private int stage;
     private ArrayList<Monster> monsters;
     private ArrayList<Item> loot;
     Player player;
     boolean inMenu;
     MenuType menuType;
     ArrayList<MenuItem> menuItems;
+    Random rng;
+    ArrayList<String> actionLog;
     
     public GameState() {
+        actionLog = new ArrayList<>();
         player = new Player(30, 20);
-        generateLevel(); 
+        rng = new Random();
+        stage = 1;
+        generateLevel();
     }
     
+    /**
+    * Generate a new level and place some items and monsters in it
+    * according to the current stage. Moves the player in one of the safe
+    * rooms of the level.
+    */
     public void generateLevel() {
         this.level = new Level();
         monsters = new ArrayList<>();
         loot = new ArrayList<>();
         
         movePlayerToRandomRoom();
-        spawnMonsterInRandomRoom();
-        spawnMonsterInRandomRoom();
-        spawnMonsterInRandomRoom();
-        spawnMonsterInRandomRoom();
-        spawnMonsterInRandomRoom();
-        spawnMonsterInRandomRoom();
         
-        spawnItemInRandomRoom();
-        spawnItemInRandomRoom();
-        spawnItemInRandomRoom();
-        spawnItemInRandomRoom();
-        spawnItemInRandomRoom();
-        spawnItemInRandomRoom();
+        for (int x = 0; x < stage; x++) {
+            spawnMonsterInRandomRoom();
+            spawnMonsterInRandomRoom();
+        }
+        
+        int items = rng.nextInt(5);
+        for (int x = 0; x < items; x++) {
+            spawnItemInRandomRoom(randomItem());
+        }
+        
+        if (stage == 10) {
+            spawnItemInRandomRoom(new Treasure(player, 0, 0));
+        }
     }
     
+    /**
+     * Finds an Entity in the given X,Y coordinate. Returns null if no
+     * applicable Entity is found.
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @return Entity, null if not found
+     */
     public Entity getEntityAt(int x, int y) {
         for (Monster m : monsters) {
             if (m.getX() == x && m.getY() == y) {
@@ -72,6 +95,12 @@ public class GameState {
         return null;
     }
     
+    /**
+     * Finds and returns an Item at given X,Y coordinate, null if not found
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @return Item, null if not found
+     */
     public Item getItemAt(int x, int y) {
         for (Item i : loot) {
             if (i.getX() == x && i.getY() == y) {
@@ -82,38 +111,107 @@ public class GameState {
         return null;
     }
     
-    public void spawnMonsterAt(int x, int y) {
-        monsters.add(new Monster("slime", "slime.png", 5, 0, 0, 0, 1, x, y));
+    /**
+     * Spawns a Monster on the level in a given X, Y coordinate
+     * @param m Monster to be spawned
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     */
+    public void spawnMonsterAt(Monster m, int x, int y) {
+        m.setX(x);
+        m.setY(y);
+        monsters.add(m);
     }
     
+    /**
+     * Creates an instance of a random monster and returns it.
+     * @return A random Monster instance
+     */
+    public Monster randomMonster() {
+        int monsterNum = rng.nextInt(3);
+        
+        if (monsterNum == 0) {
+            return new Slime(0, 0);
+        } else if (monsterNum == 1) {
+            return new Skeleton(0, 0);
+        } else {
+            return new Beholder(0, 0);
+        }
+    }
+    
+    /**
+     * Creates a random Monster instance and places it in a room at random.
+     * Does not spawn a monster in the level spawn room.
+     */
     public void spawnMonsterInRandomRoom() {
+        Room room = level.getRooms().get(rng.nextInt(level.getRooms().size() - 1) + 1);
+        
+        int rx = room.getX() + (rng.nextInt(room.getW() - 2) + 1);
+        int ry = room.getY() + (rng.nextInt(room.getH() - 2) + 1);
+        
+        spawnMonsterAt(randomMonster(), rx, ry);
+    }
+    
+    /**
+     * Spawns a given item at an X,Y coordinate on the level.
+     * @param i Item to be spawned
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     */
+    public void spawnItemAt(Item i, int x, int y) {
+        i.setX(x);
+        i.setY(y);
+        loot.add(i);
+    }
+    
+    /**
+     * Creates a random Item instance and returns it.
+     * @return randomly created Itemfir
+     */ 
+    public Item randomItem() {
+        int itemNum = rng.nextInt(4);
+        
+        if (itemNum == 0) {
+            return new HealthPotion(player, 0, 0);
+        } else if (itemNum == 1) {
+            return new Dagger(player, 0, 0);
+        } else if (itemNum == 2) {
+            return new Shortsword(player, 0, 0);
+        } else {
+            return new Roundshield(player, 0, 0);
+        }
+    }
+    
+    /**
+     * Spawns a supplied Item in a random room on the level.
+     * Items are not spawned in the spawn room.
+     * @param item Item instance to be spawned
+     */
+    public void spawnItemInRandomRoom(Item item) {
         Room room = level.getRooms().get(new Random().nextInt(level.getRooms().size() - 1) + 1);
         
-        int rx = room.getX() + (room.getW() / 2);
-        int ry = room.getY() + (room.getH() / 2);
+        int rx = room.getX() + (rng.nextInt(room.getW() - 2) + 1);
+        int ry = room.getY() + (rng.nextInt(room.getH() - 2) + 1);
         
-        spawnMonsterAt(rx, ry);
+        spawnItemAt(item, rx, ry);
     }
     
-    public void spawnItemAt(int x, int y) {
-        loot.add(new Item(player, "Potion of Health", "green_potion.png", x, y));
-    }
-    
-    public void spawnItemInRandomRoom() {
-        Room room = level.getRooms().get(new Random().nextInt(level.getRooms().size() - 1) + 1);
-        
-        int rx = room.getX() + (room.getW() / 2);
-        int ry = room.getY() + (room.getH() / 2);
-        
-        spawnItemAt(rx, ry);
-    }
-    
+    /**
+     * Takes the first room that was generated on the level and moves the player
+     * there.
+     */
     public void movePlayerToRandomRoom() {
         Room room = level.getRooms().get(0);
         player.setX(room.getX() + (room.getW() / 2));
         player.setY(room.getY() + (room.getH() / 2));
     }
     
+    /**
+     * Checks if an Entity can move upwards without being blocked by friendly
+     * entities or terrain.
+     * @param entity Entity whose movement is checked
+     * @return true if movement is possible, false otherwise.
+     */
     public boolean canMoveUp(Entity entity) {
         if (level.getMap()[entity.getY() - 1][entity.getX()].passable()) {
             Entity other = getEntityAt(entity.getX(), entity.getY() - 1);
@@ -132,6 +230,12 @@ public class GameState {
         return false;
     }
     
+    /**
+     * Checks if an Entity can move upwards without being blocked by friendly
+     * entities or terrain.
+     * @param entity Entity whose movement is checked
+     * @return true if movement is possible, false otherwise.
+     */
     public boolean canMoveDown(Entity entity) {
         if (level.getMap()[entity.getY() + 1][entity.getX()].passable()) {
             Entity other = getEntityAt(entity.getX(), entity.getY() + 1);
@@ -150,6 +254,12 @@ public class GameState {
         return false;
     }
     
+    /**
+     * Checks if an Entity can move upwards without being blocked by friendly
+     * entities or terrain.
+     * @param entity Entity whose movement is checked
+     * @return true if movement is possible, false otherwise.
+     */
     public boolean canMoveLeft(Entity entity) {
         if (level.getMap()[entity.getY()][entity.getX() - 1].passable()) {
             Entity other = getEntityAt(entity.getX() - 1, entity.getY());
@@ -168,6 +278,12 @@ public class GameState {
         return false;
     }
     
+    /**
+     * Checks if an Entity can move upwards without being blocked by friendly
+     * entities or terrain.
+     * @param entity Entity whose movement is checked
+     * @return true if movement is possible, false otherwise.
+     */
     public boolean canMoveRight(Entity entity) {
         if (level.getMap()[entity.getY()][entity.getX() + 1].passable()) {
             Entity other = getEntityAt(entity.getX() + 1, entity.getY());
@@ -186,6 +302,11 @@ public class GameState {
         return false;
     }
     
+    /**
+     * Moves an Entity if movement is possible. Ability to move is checked with
+     * canMove_() methods.
+     * @param entity Entity to move.
+     */
     public void moveUp(Entity entity) {
         if (canMoveUp(entity)) {
             Entity other = getEntityAt(entity.getX(), entity.getY() - 1);
@@ -198,6 +319,11 @@ public class GameState {
         }
     }
     
+    /**
+     * Moves an Entity if movement is possible. Ability to move is checked with
+     * canMove_() methods.
+     * @param entity Entity to move.
+     */
     public void moveDown(Entity entity) {
         if (canMoveDown(entity)) {
             Entity other = getEntityAt(entity.getX(), entity.getY() + 1);
@@ -210,6 +336,11 @@ public class GameState {
         }
     }
     
+    /**
+     * Moves an Entity if movement is possible. Ability to move is checked with
+     * canMove_() methods.
+     * @param entity Entity to move.
+     */
     public void moveLeft(Entity entity) {
         if (canMoveLeft(entity)) {
             Entity other = getEntityAt(entity.getX() - 1, entity.getY());
@@ -222,6 +353,11 @@ public class GameState {
         }
     }
     
+    /**
+     * Moves an Entity if movement is possible. Ability to move is checked with
+     * canMove_() methods.
+     * @param entity Entity to move.
+     */
     public void moveRight(Entity entity) {
         if (canMoveRight(entity)) {
             Entity other = getEntityAt(entity.getX() + 1, entity.getY());
@@ -234,14 +370,29 @@ public class GameState {
         }
     }
     
+    /**
+     * Initiates combat between two entities. Attacker will roll for damage
+     * and the damage is compared against defender's armor class (AC).
+     * @param attacker Entity that is attacking
+     * @param defender Entity that is defending
+     */
     public void combat(Entity attacker, Entity defender) {
-        attacker.attack(defender);
+        int doneDamage = attacker.attack(defender);
+        
+        if (doneDamage < 0) {
+            doneDamage = 0;
+        }
+        
+        log(attacker.getName() + " attacked " + defender.getName() + " doing " + doneDamage + " damage.");
         
         if (defender.getHP() <= 0 && defender != player) {
             monsters.remove(defender);
         }
     }
     
+    /**
+     * Moves up on a menu selection
+     */
     public void menuUp() {
         for (int x = 0; x < menuItems.size(); x++) {
             if (menuItems.get(x).selected) {
@@ -258,6 +409,9 @@ public class GameState {
         }
     }
     
+    /**
+     * Moves down on a menu selection
+     */
     public void menuDown() {
         for (int x = 0; x < menuItems.size(); x++) {
             if (menuItems.get(x).selected) {
@@ -274,24 +428,18 @@ public class GameState {
         }
     }
     
+    /**
+     * Uses an option on a menu
+     * @param input Player input in a list
+     */
     public void menuEnter(ArrayList<String> input) {
         if (menuType == MenuType.INVENTORY) {
             if (input.contains("ENTER")) {
                 for (int x = 0; x < menuItems.size(); x++) {
                     if (menuItems.get(x).selected) {
-                        player.getInventory().get(x).onUse();
+                        player.getInventory().get(x).use();
                         break;
                     }
-                }
-            } else {
-                try {
-                    System.out.println(input.get(0).replace("DIGIT", ""));
-                    int index = Integer.parseInt(input.get(0).replace("DIGIT", ""));
-                    if (player.getInventory().size() <= index) {
-                        player.getInventory().get(index - 1).onUse();
-                    }
-                } catch (Exception e) {
-                    inMenu = false;
                 }
             }
         }
@@ -299,8 +447,14 @@ public class GameState {
         inMenu = false;
     }
     
+    /**
+     * Takes user's input and processes it, executing various game actions
+     * depending on the input.
+     * @param input Player input in a list
+     */
     public void processInput(ArrayList<String> input) {
         System.out.println(input.get(0));
+        //actionLog.clear();
         
         if (inMenu) {
             if (input.contains("ESCAPE")) {
@@ -341,17 +495,21 @@ public class GameState {
         Item i = getItemAt(player.getX(), player.getY());
         
         if (i != null) {
-            System.out.println("Picked up!");
+            log("Picked up " + i.getName() + ".");
             player.getInventory().add(i);
             loot.remove(i);
         }
         
         if (level.getMap()[player.getY()][player.getX()].getType() == Tile.staircase) {
+            log("You enter the next level of the dungeon.");
+            stage++;
             generateLevel();
         }
         
-        for (Monster m : monsters) {
-            m.decision(this);
+        if (!inMenu) {
+            for (Monster m : monsters) {
+                m.decision(this);
+            }
         }
     }
     
@@ -359,7 +517,7 @@ public class GameState {
         return this.level;
     }
     
-    public Entity getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
     
@@ -377,5 +535,13 @@ public class GameState {
     
     public ArrayList<Item> getItems() {
         return this.loot;
+    }
+    
+    public ArrayList<String> getLog() {
+        return this.actionLog;
+    }
+    
+    public void log(String action) {
+        actionLog.add(action);
     }
 }

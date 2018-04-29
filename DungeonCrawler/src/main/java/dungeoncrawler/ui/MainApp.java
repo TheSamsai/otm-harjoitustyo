@@ -7,6 +7,8 @@ import dungeoncrawler.game.entities.item.Item;
 import dungeoncrawler.game.entities.monster.Monster;
 import dungeoncrawler.game.level.Tile;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -27,6 +29,17 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
     
+    private HashMap<String, Image> spriteStore;
+    
+    public Image getSprite(String sprite) {
+        if (spriteStore.containsKey(sprite)) {
+            return spriteStore.get(sprite);
+        } else {
+            spriteStore.put(sprite, new Image(sprite));
+            return spriteStore.get(sprite);
+        }
+    }
+    
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Dungeon Crawler");
@@ -42,6 +55,7 @@ public class MainApp extends Application {
         
         final GameState gs = new GameState();
         final ArrayList<String> input = new ArrayList<>();
+        spriteStore = new HashMap<>();
         
         final Image player_sprite = new Image("player.png");
         
@@ -90,26 +104,48 @@ public class MainApp extends Application {
                 }
                 
                 for (Item i : gs.getItems()) {
-                    gc.drawImage(new Image(i.getSprite()), i.getX()*20, i.getY()*20);
+                    gc.drawImage(getSprite(i.getSprite()), i.getX()*20, i.getY()*20);
                 }
                 
                 for (Monster m : gs.getMonsters()) {
-                    gc.drawImage(new Image(m.getSprite()), m.getX()*20, m.getY()*20);
+                    gc.drawImage(getSprite(m.getSprite()), m.getX()*20, m.getY()*20);
                 }
                 
                 gc.setFill(Color.GREEN);
                 
                 gc.drawImage(player_sprite, gs.getPlayer().getX()*20, gs.getPlayer().getY()*20);
                 
+                // Player info
                 gc.setFill(Color.WHITE);
-                gc.fillText("HP:" + gs.getPlayer().getHP(), 950, 20);
+                gc.fillText("HP: " + gs.getPlayer().getHP() + "/" + gs.getPlayer().maxHP(), 900, 20);
+                gc.fillText("AC: " + gs.getPlayer().getAC(), 900, 35);
+                gc.fillText("Wpn: " + gs.getPlayer().getWeapon().getName(), 900, 50);
+                gc.fillText("Arm: " + gs.getPlayer().getArmor().getName(), 900, 65);
+                gc.fillText("Shl: " + gs.getPlayer().getShield().getName(), 900, 80);
                 
+                // Action log
+                ArrayList<String> actionLog = (ArrayList<String>) gs.getLog().clone();
+                Collections.reverse(actionLog);
+                
+                int yCoord = 760;
+                int read = 0;
+                for (String action : actionLog) {
+                    gc.fillText(action, 100, yCoord);
+                    read++;
+                    yCoord -= 20;
+                    
+                    if (read > 4) {
+                        break;
+                    }
+                }
+                
+                // Menu
                 gc.setFill(Color.DARKGRAY);
                 
                 if (gs.getInMenu()) {
                     ArrayList<MenuItem> menuContents = gs.getMenuItems();
                     
-                    gc.fillRect(200, 280, 300, 20 * menuContents.size());
+                    gc.fillRect(200, 280, 300, 20 * menuContents.size() + 10);
                     gc.setFill(Color.WHITE);
                     
                     int y = 300;
@@ -121,7 +157,7 @@ public class MainApp extends Application {
                             gc.setFill(Color.WHITE);
                         }
                         gc.fillText(mi.key + " : " + mi.content, 220, y);
-                        y += 15;
+                        y += 20;
                     }
                 }
                 

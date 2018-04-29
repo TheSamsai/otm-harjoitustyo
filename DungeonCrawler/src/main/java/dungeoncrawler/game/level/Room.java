@@ -6,8 +6,9 @@
 package dungeoncrawler.game.level;
 
 /**
- *
- * @author sami
+ * A container class for a rectangular room with getters, setters and
+ * a method for checking if an X,Y coordinate falls within the room.
+ * 
  */
 public class Room {
     private int x;
@@ -46,6 +47,12 @@ public class Room {
         this.y = y;
     }
     
+    /**
+     * Checks if an X,Y coordinate is within a given room
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @return true if the point is within a room, false otherwise
+     */
     public boolean contains(int x, int y) {
         return (x <= this.x + this.w) && (y <= this.y + this.h);
     }

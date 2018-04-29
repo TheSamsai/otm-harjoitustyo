@@ -25,8 +25,26 @@ public class Item {
         this.y = y;
     }
     
-    public void onUse() {
+    /**
+     * Base functionality for the use of an item. By default an item will remove
+     * itself from the player's inventory when used. This is overridden for
+     * item-specific functionality.
+     */
+    public void use() {
         this.player.getInventory().remove(this);
+    }
+    
+    /**
+     * Base method for functionality that should be called when an item is no
+     * longer affecting the player. This method is overridden for item specific
+     * functionality. By default items are assumed not to be unwielded.
+     */
+    public void unwield() {
+        
+    }
+    
+    public Player getPlayer() {
+        return player;
     }
     
     public String getSprite() {
@@ -43,5 +61,13 @@ public class Item {
     
     public int getY() {
         return y;
+    }
+
+    public void setX(int nX) {
+        x = nX;
+    }
+    
+    public void setY(int nY) {
+        y = nY;
     }
 }

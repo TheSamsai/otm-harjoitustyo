@@ -14,7 +14,9 @@ public interface Entity {
     public int getY();
     public void setX(int x);
     public void setY(int y);
-    public void attack(Entity other);
-    public void damage(int dmg);
+    public int attack(Entity other);
+    public int damage(int dmg);
     public int getHP();
+    public void grantXP(int exp);
+    public String getName();
 }

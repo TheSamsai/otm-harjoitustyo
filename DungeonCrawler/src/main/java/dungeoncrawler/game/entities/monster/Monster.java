@@ -21,20 +21,17 @@ public class Monster implements Entity {
     private String spritePath; 
     private int hp;
     private int armor;
-    private int accuracy;
-    private int damageMin;
-    private int damageMax;
+    private int damage;
     
-    public Monster(String name, String sprite, int hp, int armor, int accuracy,
-            int damageMin, int damageMax, int x, int y) {
+    public Monster(String name, String sprite, int hp, int armor,
+            int damage, int x, int y) {
         this.x = x;
         this.y = y;
         this.name = name;
         this.spritePath = sprite;
         this.hp = hp;
         this.armor = armor;
-        this.damageMin = damageMin;
-        this.damageMax = damageMax;
+        this.damage = damage;
     }
 
     @Override
@@ -61,6 +58,11 @@ public class Monster implements Entity {
         return this.spritePath;
     }
     
+    /**
+     * Base AI decision system. By default monsters move towards a player in a
+     * straight line, if possible. No special pathfinding.
+     * @param gs Current game state
+     */
     public void decision(GameState gs) {
         if (gs.getPlayer().getX() > this.x && gs.canMoveRight(this)) {
             gs.moveRight(this);
@@ -73,23 +75,48 @@ public class Monster implements Entity {
         }
     }
 
+    /**
+     * Rolls for damage based on the monster's defined maximum damage
+     * and attacks the defender with it, returning the actual damage done.
+     * @param other The defending Entity
+     * @return The amount of damage that was done
+     */
     @Override
-    public void attack(Entity other) {
-        other.damage(new Random().nextInt(damageMax - damageMin) + damageMin);
+    public int attack(Entity other) {
+        int actualDamage = other.damage(new Random().nextInt(damage));
+        return actualDamage;
     }
 
+    /**
+     * Damages this monster for a certain amount of damage, returning the
+     * damage that wasn't blocked by the monster's armor class.
+     * @param dmg Damage targeted against the monster
+     * @return Unblocked damage that was done to the monster
+     */
     @Override
-    public void damage(int dmg) {
+    public int damage(int dmg) {
         int damageDone = dmg - armor;
         
         if (damageDone > 0) {
             hp -= damageDone;
         }
+        
+        return damageDone;
     }
 
     @Override
     public int getHP() {
         return hp;
+    }
+
+    @Override
+    public void grantXP(int exp) {
+        
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
     
     

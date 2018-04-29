@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 public class GameStateTest {
     
     public static GameState gs;
+    ArrayList<String> fakeInput;
     
     public GameStateTest() {
     }
@@ -38,6 +39,7 @@ public class GameStateTest {
     @Before
     public void setUp() {
         gs = new GameState();
+        fakeInput = new ArrayList<>();
     }
     
     @After
@@ -74,8 +76,15 @@ public class GameStateTest {
         int startX = player.getX();
         int startY = player.getY();
         
-        gs.spawnMonsterAt(player.getX()-1, player.getY());
+        gs.spawnMonsterAt(gs.randomMonster(), player.getX() - 1, player.getY());
+        gs.spawnMonsterAt(gs.randomMonster(), player.getX() + 1, player.getY());
+        gs.spawnMonsterAt(gs.randomMonster(), player.getX(), player.getY() - 1);
+        gs.spawnMonsterAt(gs.randomMonster(), player.getX(), player.getY() + 1);
+        
         gs.moveLeft(player);
+        gs.moveRight(player);
+        gs.moveUp(player);
+        gs.moveDown(player);
         
         assertTrue((startX == player.getX()) == (startY == player.getY()));
     }
@@ -85,7 +94,7 @@ public class GameStateTest {
         ArrayList<Room> rooms = gs.getLevel().getRooms();
         Player player = (Player) gs.getPlayer();
         
-        gs.spawnItemAt(player.getX()-1, player.getY());
+        gs.spawnItemAt(gs.randomItem(), player.getX()-1, player.getY());
         gs.moveLeft(player);
         
         ArrayList<String> input = new ArrayList<>();
@@ -94,5 +103,27 @@ public class GameStateTest {
         gs.processInput(input);
         
         assertTrue(player.getInventory().size() > 0);
+    }
+    
+    @Test
+    public void iKeyEntersMenu() {
+        fakeInput.add("I");
+        
+        gs.processInput(fakeInput);
+        
+        assertTrue(gs.getInMenu());
+    }
+    
+    @Test
+    public void escapeGetsOutOfMenu() {
+        fakeInput.add("I");
+        
+        gs.processInput(fakeInput);
+        
+        fakeInput.clear();
+        fakeInput.add("ESCAPE");
+        gs.processInput(fakeInput);
+        
+        assertFalse(gs.getInMenu());
     }
 }

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
- * @author sami
+ * Class that contains the relevant information to the current map, like
+ * the various rooms and the types of tiles in each location.
  */
 public class Level {
     private Tile[][] map;
@@ -26,6 +26,13 @@ public class Level {
     // 1. Divide level into a 3x3 grid
     // 2. Populate one grid with a fitting room
     // 3. Populate up to 7 grids, always connecting new room to a previous room
+
+    /**
+     * Generates a map based on the old Rogue algorithm:
+     * Fill the entire map with empty tiles and  divide the level into 3x3 grid.
+     * Then populate up to 7 grids with randomly sized rooms and connect them with 
+     * a tunnel to a previously generated room.
+     */
     public void generateMap() {
         this.map = new Tile[30][45];
         Random rng = new Random();
@@ -67,6 +74,14 @@ public class Level {
         map[lastRoom.getY() + (lastRoom.getH() / 2)][lastRoom.getX() + (lastRoom.getW() / 2)] = new Tile(Tile.staircase);
     }
     
+    /**
+     * Creates a hallway between two X,Y coordinates by making direct lines.
+     * Surrounding map tiles are turned into Wall tiles.
+     * @param x Starting X-coordinate
+     * @param y Starting Y-coordinate
+     * @param dx Target X-coordinate
+     * @param dy Target Y-coordinate
+     */
     public void carveTunnel(int x, int y, int dx, int dy) {
         this.map[y][x] = new Tile(Tile.floor);
         
@@ -108,6 +123,12 @@ public class Level {
         }
     }
     
+    /**
+     * Makes a room in the level based on a Room object
+     * Tiles inside the room are made to be Floor tiles, surrounding tiles
+     * are turned into Wall tiles.
+     * @param room Room to be carved onto the level.
+     */
     public void carveRoom(Room room) {
         for (int y = room.getY(); y < room.getY() + room.getH(); y++) {
             for (int x = room.getX(); x < room.getX() + room.getW(); x++) {
