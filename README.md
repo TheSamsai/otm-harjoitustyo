@@ -6,9 +6,10 @@
 
 [Initial project requirement spec](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/RequirementSpec.md)
 
-## Project architecture
+## Project documentation
 
 [Project architecture documentation](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/architecture.md)
+[User manual](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/usermanual.md)
 
 ## Releases
 
