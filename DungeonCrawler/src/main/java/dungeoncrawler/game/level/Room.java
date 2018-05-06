@@ -54,6 +54,6 @@ public class Room {
      * @return true if the point is within a room, false otherwise
      */
     public boolean contains(int x, int y) {
-        return (x <= this.x + this.w) && (y <= this.y + this.h);
+        return (x >= this.x && x <= this.x + this.w) && (y >= this.y && y <= this.y + this.h);
     }
 }

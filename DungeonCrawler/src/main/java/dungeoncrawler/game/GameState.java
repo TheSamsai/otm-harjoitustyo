@@ -152,7 +152,9 @@ public class GameState {
      * Does not spawn a monster in the level spawn room.
      */
     public void spawnMonsterInRandomRoom() {
-        Room room = level.getRooms().get(rng.nextInt(level.getRooms().size() - 1) + 1);
+        int roomNum = rng.nextInt(level.getRooms().size() - 1) + 1;
+        
+        Room room = level.getRooms().get(roomNum);
         
         int rx = room.getX() + (rng.nextInt(room.getW() - 2) + 1);
         int ry = room.getY() + (rng.nextInt(room.getH() - 2) + 1);
