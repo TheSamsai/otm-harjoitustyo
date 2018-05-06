@@ -1,3 +1,5 @@
+package gamestate;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,6 +10,7 @@ import dungeoncrawler.game.entities.Entity;
 import dungeoncrawler.game.GameState;
 import dungeoncrawler.game.entities.Player;
 import dungeoncrawler.game.level.Room;
+import dungeoncrawler.game.level.Tile;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -82,7 +85,31 @@ public class GameStateTest {
         gs.spawnMonsterAt(gs.randomMonster(), player.getX(), player.getY() + 1);
         
         gs.moveLeft(player);
+        gs.moveLeft(player);
         gs.moveRight(player);
+        gs.moveUp(player);
+        gs.moveUp(player);
+        gs.moveDown(player);
+        
+        assertTrue((startX == player.getX()) == (startY == player.getY()));
+    }
+    
+    @Test
+    public void movingIntoWallsDoesNotMovePlayer() {
+        ArrayList<Room> rooms = gs.getLevel().getRooms();
+        Entity player = gs.getPlayer();
+        int startX = player.getX();
+        int startY = player.getY();
+        
+        gs.getLevel().getMap()[player.getY()][player.getX() - 1] = new Tile(Tile.wall);
+        gs.getLevel().getMap()[player.getY()][player.getX() + 1] = new Tile(Tile.wall);
+        gs.getLevel().getMap()[player.getY() - 1][player.getX()] = new Tile(Tile.wall);
+        gs.getLevel().getMap()[player.getY() + 1][player.getX()] = new Tile(Tile.wall);
+        
+        gs.moveLeft(player);
+        gs.moveLeft(player);
+        gs.moveRight(player);
+        gs.moveUp(player);
         gs.moveUp(player);
         gs.moveDown(player);
         

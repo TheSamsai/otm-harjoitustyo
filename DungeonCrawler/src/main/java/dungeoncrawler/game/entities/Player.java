@@ -87,13 +87,16 @@ public class Player implements Entity {
     }
     
     @Override
-    public void grantXP(int exp) {
+    public boolean grantXP(int exp) {
         xp += exp;
         
         if (xp > 100) {
             xp = 0;
             level++;
+            heal(5);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -176,5 +179,10 @@ public class Player implements Entity {
     
     public void decreaseDamage(int i) {
         this.damage -= i;
+    }
+
+    @Override
+    public int xpGain() {
+        return 0;
     }
 }

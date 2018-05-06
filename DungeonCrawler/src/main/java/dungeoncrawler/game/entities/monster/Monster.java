@@ -110,13 +110,18 @@ public class Monster implements Entity {
     }
 
     @Override
-    public void grantXP(int exp) {
-        
+    public boolean grantXP(int exp) {
+        return false;
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int xpGain() {
+        return 10;
     }
     
     

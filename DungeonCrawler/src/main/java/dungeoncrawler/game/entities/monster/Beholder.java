@@ -12,7 +12,11 @@ package dungeoncrawler.game.entities.monster;
 public class Beholder extends Monster {
     
     public Beholder(int x, int y) {
-        super("Beholder", "beholder.png", 3, 0, 6, x, y);
+        super("Beholder", "beholder.png", 3, 1, 5, x, y);
     }
     
+    @Override
+    public int xpGain() {
+        return 50;
+    }
 }

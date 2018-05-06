@@ -7,4 +7,5 @@
 <suppressions>
     <suppress files="dungeoncrawler.ui.MainApp.java" checks="[a-zA-Z0-9]*"/>
     <suppress files="dungeoncrawler.ui.FXMLController.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="org.sqlite.*" checks="[a-zA-Z0-9]*"/>
 </suppressions>

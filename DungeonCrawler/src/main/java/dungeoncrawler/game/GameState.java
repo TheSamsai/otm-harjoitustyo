@@ -5,6 +5,8 @@
  */
 package dungeoncrawler.game;
 
+import db.Highscore;
+import db.HighscoreDao;
 import dungeoncrawler.game.entities.monster.*;
 import dungeoncrawler.game.entities.Player;
 import dungeoncrawler.game.entities.Entity;
@@ -12,15 +14,19 @@ import dungeoncrawler.game.entities.item.*;
 import dungeoncrawler.game.level.Level;
 import dungeoncrawler.game.level.Room;
 import dungeoncrawler.game.level.Tile;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  *
  * @author sami
  */
 enum MenuType {
-    INVENTORY
+    INVENTORY,
+    NAMEENTRY,
+    SCOREBOARD,
 }
 
 /**
@@ -28,6 +34,7 @@ enum MenuType {
  * various functions for probing and modifying the state.
  */
 public class GameState {
+    private HighscoreDao highscoredb;
     private Level level;
     private int stage;
     private ArrayList<Monster> monsters;
@@ -40,6 +47,7 @@ public class GameState {
     ArrayList<String> actionLog;
     
     public GameState() {
+        highscoredb = new HighscoreDao("jdbc:sqlite:scores.db");
         actionLog = new ArrayList<>();
         player = new Player(30, 20);
         rng = new Random();
@@ -166,7 +174,7 @@ public class GameState {
     
     /**
      * Creates a random Item instance and returns it.
-     * @return randomly created Itemfir
+     * @return randomly created Item
      */ 
     public Item randomItem() {
         int itemNum = rng.nextInt(4);
@@ -386,7 +394,29 @@ public class GameState {
         log(attacker.getName() + " attacked " + defender.getName() + " doing " + doneDamage + " damage.");
         
         if (defender.getHP() <= 0 && defender != player) {
+            boolean levelUp = attacker.grantXP(defender.xpGain());
+            
+            if (levelUp) {
+                log("You feel stronger!");
+            }
+            
             monsters.remove(defender);
+        } else if (defender.getHP() <= 0 && defender == player) {
+            log("You have perished!");
+            
+            endgame();
+        }
+    }
+    
+    public void endgame() {
+        inMenu = true;
+        menuType = MenuType.NAMEENTRY;
+        menuItems = new ArrayList<>();
+            
+        menuItems.add(new MenuItem("Enter your name: ", "Player"));
+                
+        if (!menuItems.isEmpty()) {
+            menuItems.get(0).selected = true;
         }
     }
     
@@ -432,7 +462,7 @@ public class GameState {
      * Uses an option on a menu
      * @param input Player input in a list
      */
-    public void menuEnter(ArrayList<String> input) {
+    public void menuKey(ArrayList<String> input) {
         if (menuType == MenuType.INVENTORY) {
             if (input.contains("ENTER")) {
                 for (int x = 0; x < menuItems.size(); x++) {
@@ -441,10 +471,61 @@ public class GameState {
                         break;
                     }
                 }
+                 
+                inMenu = false;
+            }
+        } else if (menuType == MenuType.NAMEENTRY) {
+            if (input.contains("ENTER")) {
+                int score = stage * 100 + (player.maxHP() - 22) * 10;
+                
+                for (Item i : player.getInventory()) {
+                    if (i.getName() == "Unfathomable Treasures") {
+                        score += 1000;
+                    }
+                }
+                
+                try {
+                    highscoredb.addNewScore(new Highscore(menuItems.get(0).content, score));
+                } catch (SQLException ex) {
+                    System.out.println("DB connection failure");
+                }
+                
+                menuType = MenuType.SCOREBOARD;
+                menuItems = new ArrayList<>();
+            
+                try {
+                    int x = 1;
+                    
+                    for (Highscore hscore : highscoredb.getScores()) {
+                        menuItems.add(new MenuItem(x + ": ", hscore.getName() + " - " + hscore.getScore()));
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("DB connection failure");
+                }
+            } else if (input.contains("BACK_SPACE")) {
+                String content = menuItems.get(0).content;
+                if (content.length() > 0) {
+                    menuItems.get(0).content = content.substring(0, content.length() - 1);
+                }
+            } else if (input.get(0).length() == 1) {
+                String content = menuItems.get(0).content;
+                menuItems.get(0).content = content.concat(input.get(0));
             }
         }
-                
-        inMenu = false;
+    }
+    
+    public void processMenuInput(ArrayList<String> input) {
+        if (input.contains("ESCAPE")) {
+            if (menuType == MenuType.INVENTORY) {
+                inMenu = false;
+            }
+        } else if (input.contains("DOWN")) {
+            menuDown();
+        } else if (input.contains("UP")) {
+            menuUp();
+        } else {
+            menuKey(input);
+        }
     }
     
     /**
@@ -457,15 +538,7 @@ public class GameState {
         //actionLog.clear();
         
         if (inMenu) {
-            if (input.contains("ESCAPE")) {
-                inMenu = false;
-            } else if (input.contains("DOWN")) {
-                menuDown();
-            } else if (input.contains("UP")) {
-                menuUp();
-            } else {
-                menuEnter(input);
-            }
+            processMenuInput(input);
         } else {
             if (input.contains("UP")) {
                 moveUp(player);
@@ -489,6 +562,16 @@ public class GameState {
                 if (!menuItems.isEmpty()) {
                     menuItems.get(0).selected = true;
                 }
+            } else if (input.contains("N")) {
+                inMenu = true;
+                menuType = MenuType.NAMEENTRY;
+                menuItems = new ArrayList<>();
+            
+                menuItems.add(new MenuItem("Enter your name: ", "Player"));
+                
+                if (!menuItems.isEmpty()) {
+                    menuItems.get(0).selected = true;
+                }
             }
         }
         
@@ -497,7 +580,7 @@ public class GameState {
         if (i != null) {
             log("Picked up " + i.getName() + ".");
             player.getInventory().add(i);
-            loot.remove(i);
+            loot.remove(i);           
         }
         
         if (level.getMap()[player.getY()][player.getX()].getType() == Tile.staircase) {

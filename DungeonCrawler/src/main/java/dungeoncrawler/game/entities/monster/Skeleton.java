@@ -12,7 +12,11 @@ package dungeoncrawler.game.entities.monster;
 public class Skeleton extends Monster {
     
     public Skeleton(int x, int y) {
-        super("Skeleton", "skeleton.png", 6, 2, 4, x, y);
+        super("Skeleton", "skeleton.png", 6, 2, 3, x, y);
     }
     
+    @Override
+    public int xpGain() {
+        return 100;
+    }
 }

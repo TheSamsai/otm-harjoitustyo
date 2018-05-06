@@ -17,6 +17,7 @@ public interface Entity {
     public int attack(Entity other);
     public int damage(int dmg);
     public int getHP();
-    public void grantXP(int exp);
+    public boolean grantXP(int exp);
+    public int xpGain();
     public String getName();
 }
