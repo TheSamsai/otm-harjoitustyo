@@ -6,7 +6,7 @@
 package dungeoncrawler.game.entities.monster;
 
 /**
- *
+ * Enemy with some armour and high health, medium damage.
  * @author sami
  */
 public class Skeleton extends Monster {

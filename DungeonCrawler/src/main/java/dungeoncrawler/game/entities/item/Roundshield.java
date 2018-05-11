@@ -8,7 +8,7 @@ package dungeoncrawler.game.entities.item;
 import dungeoncrawler.game.entities.Player;
 
 /**
- *
+ * Defensive item that increases player's armour class
  * @author sami
  */
 public class Roundshield extends Item {

@@ -8,7 +8,8 @@ package dungeoncrawler.game.entities.item;
 import dungeoncrawler.game.entities.Player;
 
 /**
- *
+ * Base class which various items will inherit from
+ * By default using an item removes it from user inventory
  * @author sami
  */
 public class Item {

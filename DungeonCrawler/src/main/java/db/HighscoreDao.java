@@ -42,7 +42,16 @@ public class HighscoreDao {
         }
     }
     
+    /**
+     * Adds a new score to the Highscore database
+     * @param score A Highscore object to be stored
+     * @throws SQLException Exception set if database connection cannot be established
+     */
     public void addNewScore(Highscore score) throws SQLException {
+        if (score.getName().isEmpty() || score.getScore() < 0) {
+            return;
+        }
+        
         try {
             Connection conn = getConnection();
             
@@ -58,12 +67,17 @@ public class HighscoreDao {
         }
     }
     
+    /**
+     * Gets top 10 highest scores from the database
+     * @return List of highscores from highest to 10th highest
+     * @throws SQLException Throws an exception if database connection cannot be established
+     */
     public ArrayList<Highscore> getScores() throws SQLException {
         try {
             Connection conn = getConnection();
             
             if (conn != null) {
-                PreparedStatement select = conn.prepareStatement("SELECT * FROM Highscore");
+                PreparedStatement select = conn.prepareStatement("SELECT * FROM Highscore ORDER BY score DESC LIMIT 10");
                 
                 ResultSet set = select.executeQuery();
                 

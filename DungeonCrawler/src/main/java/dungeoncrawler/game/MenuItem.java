@@ -6,7 +6,7 @@
 package dungeoncrawler.game;
 
 /**
- *
+ * Container class for constructing and relaying menu information
  * @author sami
  */
 public class MenuItem {

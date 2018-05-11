@@ -5,19 +5,11 @@
  */
 package dungeoncrawler.game.level;
 
+
 /**
- *
+ * Container class for a single game tile
  * @author sami
  */
-enum TileType {
-    CHASM,
-    WALL,
-    FLOOR,
-    WATER,
-    LAVA,
-    STAIRCASE
-}
-
 public class Tile {
     public static int chasm = 0;
     public static int wall = 2;
@@ -36,6 +28,10 @@ public class Tile {
         return this.type;
     }
     
+    /**
+     * Check if a tile can be stepped on
+     * @return True for passable, False for other tiles
+     */
     public boolean passable() {
         if (this.type == Tile.floor) {
             return true;

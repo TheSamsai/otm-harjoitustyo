@@ -6,7 +6,7 @@
 package dungeoncrawler.game.entities.monster;
 
 /**
- *
+ * Enemy with strong attacks but otherwise fairly weak armour and health
  * @author sami
  */
 public class Beholder extends Monster {

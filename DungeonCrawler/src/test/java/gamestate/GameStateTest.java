@@ -12,6 +12,7 @@ import dungeoncrawler.game.MenuItem;
 import dungeoncrawler.game.entities.Player;
 import dungeoncrawler.game.entities.item.HealthPotion;
 import dungeoncrawler.game.entities.item.Roundshield;
+import dungeoncrawler.game.entities.item.Treasure;
 import dungeoncrawler.game.level.Room;
 import dungeoncrawler.game.level.Tile;
 import java.util.ArrayList;
@@ -317,12 +318,13 @@ public class GameStateTest {
         menu.clear();
         
         menu.add(new MenuItem("wrong", "wrong"));
+        menu.add(new MenuItem("wrong", "wrong"));
         menu.add(new MenuItem("right", "right"));
-        menu.get(0).selected = true;
+        menu.get(1).selected = true;
         
         gs.menuDown();
         
-        assertTrue(menu.get(1).selected);
+        assertTrue(menu.get(2).selected);
     }
     
     @Test
@@ -336,10 +338,46 @@ public class GameStateTest {
         
         menu.add(new MenuItem("right", "right"));
         menu.add(new MenuItem("wrong", "wrong"));
+        menu.add(new MenuItem("wrong", "wrong"));
         menu.get(1).selected = true;
         
-        gs.menuDown();
+        gs.menuUp();
         
         assertTrue(menu.get(0).selected);
+    }
+    
+    @Test
+    public void nameEntryUponEnd() {
+        gs.spawnItemAt(new Treasure(gs.getPlayer(), 0, 0), gs.getPlayer().getX() - 1, gs.getPlayer().getY());
+        
+        fakeInput.add("LEFT");
+        gs.processInput(fakeInput);
+        
+        assertTrue(gs.getInMenu());
+    }
+    
+    @Test
+    public void nameEntryGathersCharacters() {
+        gs.spawnItemAt(new Treasure(gs.getPlayer(), 0, 0), gs.getPlayer().getX() - 1, gs.getPlayer().getY());
+        
+        fakeInput.add("LEFT");
+        gs.processInput(fakeInput);
+        
+        
+        for (int x = 0; x < 10; x++) {
+            fakeInput.add("BACK_SPACE");
+            gs.processInput(fakeInput);
+        }
+        
+        fakeInput.add("T");
+        gs.processInput(fakeInput);
+        fakeInput.add("E");
+        gs.processInput(fakeInput);
+        fakeInput.add("S");
+        gs.processInput(fakeInput);
+        fakeInput.add("T");
+        gs.processInput(fakeInput);
+        
+        assertEquals(gs.getMenuItems().get(0).content, "TEST");
     }
 }

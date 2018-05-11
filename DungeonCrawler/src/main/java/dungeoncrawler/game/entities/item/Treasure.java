@@ -8,7 +8,7 @@ package dungeoncrawler.game.entities.item;
 import dungeoncrawler.game.entities.Player;
 
 /**
- *
+ * Endgame item. Pick up to win.
  * @author sami
  */
 public class Treasure extends Item {

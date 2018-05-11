@@ -10,7 +10,7 @@ import dungeoncrawler.game.entities.Entity;
 import java.util.Random;
 
 /**
- *
+ * Base class for enemy sub-classes to inherit from.
  * @author sami
  */
 public class Monster implements Entity {

@@ -6,7 +6,7 @@
 package dungeoncrawler.game.entities.monster;
 
 /**
- *
+ * Simple enemy with low health and damage
  * @author sami
  */
 public class Slime extends Monster {

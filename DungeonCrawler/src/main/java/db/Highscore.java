@@ -6,7 +6,7 @@
 package db;
 
 /**
- *
+ * Container class for highscores to be stored in the database
  * @author sami
  */
 public class Highscore {

@@ -8,7 +8,7 @@ package dungeoncrawler.game.entities.item;
 import dungeoncrawler.game.entities.Player;
 
 /**
- *
+ * Basic weapon the player spawns with
  * @author sami
  */
 public class Dagger extends Item {

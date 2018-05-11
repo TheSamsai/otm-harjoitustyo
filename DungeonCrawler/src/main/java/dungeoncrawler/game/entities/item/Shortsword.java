@@ -6,7 +6,7 @@
 package dungeoncrawler.game.entities.item;
 
 /**
- *
+ * Slightly upgraded weapon that does more damage
  * @author sami
  */
 

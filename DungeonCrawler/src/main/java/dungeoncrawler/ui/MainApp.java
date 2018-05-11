@@ -2,7 +2,6 @@ package dungeoncrawler.ui;
 
 import dungeoncrawler.game.GameState;
 import dungeoncrawler.game.MenuItem;
-import dungeoncrawler.game.entities.Entity;
 import dungeoncrawler.game.entities.item.Item;
 import dungeoncrawler.game.entities.monster.Monster;
 import dungeoncrawler.game.level.Tile;
@@ -13,17 +12,13 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
@@ -46,7 +41,8 @@ public class MainApp extends Application {
         
         Group root = new Group();
         Scene theScene = new Scene(root);
-        stage.setScene( theScene );
+        stage.setScene(theScene);
+        stage.setResizable(false);
         
         Canvas canvas = new Canvas(1024, 768);
         root.getChildren().add(canvas);
@@ -58,6 +54,7 @@ public class MainApp extends Application {
         spriteStore = new HashMap<>();
         
         final Image player_sprite = new Image("player.png");
+        final Image stairs = new Image("stairs.png");
         
         // Keyboard input
         theScene.setOnKeyReleased(
@@ -95,11 +92,13 @@ public class MainApp extends Application {
                             gc.setFill(Color.RED);
                         } else if (type == Tile.chasm) {
                             gc.setFill(Color.BLACK);
-                        } else if (type == Tile.staircase) {
-                            gc.setFill(Color.GREEN);
                         }
                 
                         gc.fillRect(x*20, y*20, 20, 20);
+                        
+                        if (type == Tile.staircase) {
+                            gc.drawImage(stairs, x*20, y*20);
+                        }
                     }
                 }
                 
@@ -145,10 +144,12 @@ public class MainApp extends Application {
                 if (gs.getInMenu()) {
                     ArrayList<MenuItem> menuContents = gs.getMenuItems();
                     
-                    gc.fillRect(200, 280, 300, 20 * menuContents.size() + 10);
+                    gc.fillRect(200, 280, 300, 20 * menuContents.size() + 30);
                     gc.setFill(Color.WHITE);
                     
-                    int y = 300;
+                    gc.fillText(gs.getMenuTitle(), 250, 300);
+                    
+                    int y = 320;
                     
                     for (MenuItem mi : menuContents) {
                         if (mi.selected) {

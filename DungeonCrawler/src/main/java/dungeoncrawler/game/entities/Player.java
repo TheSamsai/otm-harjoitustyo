@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
+ * Class containing player-specific information such as health and various
+ * helper methods
  * @author sami
  */
 public class Player implements Entity {
@@ -60,12 +61,23 @@ public class Player implements Entity {
         this.y = y;
     }
 
+    /**
+     * Method for the player attacking another entity,
+     * damage is calculated as player.damage + player.level
+     * @param other Another Entity to be attacked
+     * @return The amount of damage that was done to the entity
+     */
     @Override
     public int attack(Entity other) {
         int actualDamage = other.damage(new Random().nextInt(damage + level));
         return actualDamage;
     }
 
+    /**
+     * Damage the player with a certain amount of incoming damage
+     * @param dmg Raw damage to be done to the player
+     * @return The actual damage that passed player's defence
+     */
     @Override
     public int damage(int dmg) {
         int actualDamage = dmg - ac;
@@ -77,6 +89,10 @@ public class Player implements Entity {
         return actualDamage;
     }
     
+    /**
+     * Increase player's health up to player's maximum health
+     * @param hp
+     */
     public void heal(int hp) {
         if (this.hp + hp > maxHP()) {
             this.hp = maxHP();
@@ -86,14 +102,20 @@ public class Player implements Entity {
         
     }
     
+    /**
+     * Give the player experience points, if points go above 100
+     * player's level increases
+     * @param exp Experience points given to the player
+     * @return True if player levels up, false otherwise
+     */
     @Override
     public boolean grantXP(int exp) {
         xp += exp;
         
-        if (xp > 100) {
+        if (xp > 100 * level) {
             xp = 0;
             level++;
-            heal(5);
+            heal(2);
             return true;
         }
         return false;
@@ -116,6 +138,11 @@ public class Player implements Entity {
         damage = dmg;
     } 
     
+    /**
+     * Calculates and returns player's maximum health
+     * maxHP is calculated as 20 + player.level * 2
+     * @return Player's current maximum health 
+     */
     public int maxHP() {
         return 20 + level * 2;
     }

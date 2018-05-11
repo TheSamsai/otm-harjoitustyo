@@ -63,13 +63,21 @@ public class ItemTest {
     
     @Test
     public void shieldIncreasesAC() {
-        gs.getPlayer().damage(5);
-        
         int acNow = gs.getPlayer().getAC();
         
         Roundshield rs = new Roundshield(gs.getPlayer(), 0, 0);
         rs.use();
         
         assertTrue(acNow < gs.getPlayer().getAC());
+    }
+    
+    @Test
+    public void swordIncreasesDamage() {
+        int dmgNow = gs.getPlayer().getDamage();
+        
+        Shortsword sword = new Shortsword(gs.getPlayer(), 0, 0);
+        sword.use();
+        
+        assertTrue(dmgNow < gs.getPlayer().getDamage());
     }
 }

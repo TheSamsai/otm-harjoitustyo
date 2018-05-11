@@ -5,8 +5,6 @@
  */
 package dungeoncrawler.game.level;
 
-import dungeoncrawler.game.level.Room;
-import dungeoncrawler.game.level.Tile;
 import java.util.ArrayList;
 import java.util.Random;
 

@@ -17,7 +17,7 @@ import dungeoncrawler.game.level.Tile;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -41,13 +41,13 @@ public class GameState {
     private ArrayList<Item> loot;
     Player player;
     boolean inMenu;
+    String menuTitle;
     MenuType menuType;
     ArrayList<MenuItem> menuItems;
     Random rng;
     ArrayList<String> actionLog;
     
     public GameState() {
-        highscoredb = new HighscoreDao("jdbc:sqlite:scores.db");
         actionLog = new ArrayList<>();
         player = new Player(30, 20);
         rng = new Random();
@@ -77,7 +77,7 @@ public class GameState {
             spawnItemInRandomRoom(randomItem());
         }
         
-        if (stage == 10) {
+        if (stage >= 10) {
             spawnItemInRandomRoom(new Treasure(player, 0, 0));
         }
     }
@@ -410,9 +410,13 @@ public class GameState {
         }
     }
     
+    /**
+     * Creates a menu for name entry to initiate end of the game
+     */
     public void endgame() {
         inMenu = true;
         menuType = MenuType.NAMEENTRY;
+        menuTitle = "Game over. Enter your name.";
         menuItems = new ArrayList<>();
             
         menuItems.add(new MenuItem("Enter your name: ", "Player"));
@@ -461,7 +465,7 @@ public class GameState {
     }
     
     /**
-     * Uses an option on a menu
+     * Passes user input to a more specialised input handler for menus
      * @param input Player input in a list
      */
     public void menuKey(ArrayList<String> input) {
@@ -487,12 +491,14 @@ public class GameState {
                 }
                 
                 try {
+                    highscoredb = new HighscoreDao("jdbc:sqlite:scores.db");
                     highscoredb.addNewScore(new Highscore(menuItems.get(0).content, score));
                 } catch (SQLException ex) {
                     System.out.println("DB connection failure");
                 }
                 
                 menuType = MenuType.SCOREBOARD;
+                menuTitle = "Press Enter to quit.";
                 menuItems = new ArrayList<>();
             
                 try {
@@ -500,6 +506,7 @@ public class GameState {
                     
                     for (Highscore hscore : highscoredb.getScores()) {
                         menuItems.add(new MenuItem(x + ": ", hscore.getName() + " - " + hscore.getScore()));
+                        x++;
                     }
                 } catch (SQLException ex) {
                     System.out.println("DB connection failure");
@@ -513,9 +520,15 @@ public class GameState {
                 String content = menuItems.get(0).content;
                 menuItems.get(0).content = content.concat(input.get(0));
             }
+        } else {
+            Platform.exit();
         }
     }
     
+    /**
+     * Processes input when game is in a menu
+     * @param input A key press from the user
+     */
     public void processMenuInput(ArrayList<String> input) {
         if (input.contains("ESCAPE")) {
             if (menuType == MenuType.INVENTORY) {
@@ -536,9 +549,6 @@ public class GameState {
      * @param input Player input in a list
      */
     public void processInput(ArrayList<String> input) {
-        System.out.println(input.get(0));
-        //actionLog.clear();
-        
         if (inMenu) {
             processMenuInput(input);
         } else {
@@ -553,6 +563,7 @@ public class GameState {
             } else if (input.contains("I")) {
                 inMenu = true;
                 menuType = MenuType.INVENTORY;
+                menuTitle = "Inventory";
                 menuItems = new ArrayList<>();
             
                 int counter = 1;
@@ -560,16 +571,6 @@ public class GameState {
                     menuItems.add(new MenuItem("" + counter, i.getName()));
                     counter++;
                 }
-                
-                if (!menuItems.isEmpty()) {
-                    menuItems.get(0).selected = true;
-                }
-            } else if (input.contains("N")) {
-                inMenu = true;
-                menuType = MenuType.NAMEENTRY;
-                menuItems = new ArrayList<>();
-            
-                menuItems.add(new MenuItem("Enter your name: ", "Player"));
                 
                 if (!menuItems.isEmpty()) {
                     menuItems.get(0).selected = true;
@@ -582,6 +583,9 @@ public class GameState {
         if (i != null) {
             log("Picked up " + i.getName() + ".");
             player.getInventory().add(i);
+            if (i.getName().equals("Unfathomable Treasures")) {
+                endgame();
+            }
             loot.remove(i);           
         }
         
@@ -596,6 +600,8 @@ public class GameState {
                 m.decision(this);
             }
         }
+        
+        input.clear();
     }
     
     public Level getLevel() {
@@ -608,6 +614,10 @@ public class GameState {
     
     public boolean getInMenu() {
         return this.inMenu;
+    }
+    
+    public String getMenuTitle() {
+        return this.menuTitle;
     }
     
     public ArrayList<MenuItem> getMenuItems() {

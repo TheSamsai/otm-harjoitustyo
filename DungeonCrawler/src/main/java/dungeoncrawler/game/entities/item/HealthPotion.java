@@ -8,7 +8,7 @@ package dungeoncrawler.game.entities.item;
 import dungeoncrawler.game.entities.Player;
 
 /**
- *
+ * Potion that heals the player when used
  * @author sami
  */
 public class HealthPotion extends Item {

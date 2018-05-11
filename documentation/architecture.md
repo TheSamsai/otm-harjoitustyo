@@ -56,3 +56,15 @@ example.
 Typically when the player takes action, the Player object's state is modified in some way, followed by the NPCs taking their
 actions in order, modifying their own state. Once the state modifications are complete, the execution is continued in the
 user interface code and the updated game state is presented the to the user. 
+
+An example of a turn of player's movement and subsequent AI movement is described in the following sequence diagram:
+
+![Input processing sequence](TODO)
+
+## Database
+
+The program uses a simple sqlite database to store highscores. The database consists of a single database table
+called Highscore which stores a name (string) and a score (int). The name is a name given by the player and
+the score is calculated when the game is ended based on the player's progress. The database is stored in a
+scores.db file and is created if it does not exist already.
+
