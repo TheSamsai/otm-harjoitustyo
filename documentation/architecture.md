@@ -59,7 +59,7 @@ user interface code and the updated game state is presented the to the user.
 
 An example of a turn of player's movement and subsequent AI movement is described in the following sequence diagram:
 
-![Input processing sequence](TODO)
+![Input processing sequence](https://raw.githubusercontent.com/TheSamsai/otm-harjoitustyo/master/documentation/input-process.png)
 
 ## Database
 
