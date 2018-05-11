@@ -16,7 +16,7 @@ that the database stores and presents data in the correct way and order.
 
 UI code is not included in the testing coverage. Instruction coverage is 86% and branch coverage is at 79%.
 
-![Test coverage](TODO)
+![Test coverage](https://raw.githubusercontent.com/TheSamsai/otm-harjoitustyo/master/documentation/test-coverage.png)
 
 ### System testing
 
