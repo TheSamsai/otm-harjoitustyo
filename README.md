@@ -19,3 +19,5 @@
 [0.1 release](https://github.com/TheSamsai/otm-harjoitustyo/releases/tag/v0.1)
 
 [0.5 release](https://github.com/TheSamsai/otm-harjoitustyo/releases/tag/0.5)
+
+[1.0 release (loppupalautus)](https://github.com/TheSamsai/otm-harjoitustyo/releases/tag/1.0)
