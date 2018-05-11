@@ -4,7 +4,7 @@
 
 ## Project details
 
-[Initial project requirement spec](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/RequirementSpec.md)
+[Project features](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/RequirementSpec.md)
 
 ## Project documentation
 
