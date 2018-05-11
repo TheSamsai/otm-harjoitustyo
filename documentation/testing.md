@@ -24,12 +24,12 @@ System testing was done manually by playing the game on two separate Linux syste
 
 #### Installation and configuration
 
-The program was downloaded from Github and was run according to the instructions in the user manual. The game was executed
+The program was downloaded from Github and was run according to the instructions in the [user manual](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/usermanual.md). The game was executed
 from its download directory with and without a highscore database present. 
 
 #### Features
 
-All the features listed on the Requirements Spec was tested and illegal movement and player actions were tried, such
+All the features listed on the [Requirements Spec](https://github.com/TheSamsai/otm-harjoitustyo/blob/master/documentation/RequirementSpec.md) was tested and illegal movement and player actions were tried, such
 as entering inaccessible areas of the game world and giving the game errorneous user input in menus.
 
 #### Current quality issues
